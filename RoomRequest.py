@@ -42,3 +42,4 @@ class RoomRequest(Base):
         print('key number shism', key.key_number)
         key.room_requests_list.append(key_issue)
         self.keys_list.append(key_issue)
+        return key_issue

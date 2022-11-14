@@ -14,7 +14,6 @@ class Door(Base):
     door_name = Column(String(100), ForeignKey('door_names.name'), primary_key=True, nullable=False)
 
     room = relationship("Room", back_populates='door')
-    # door_name = relationship('DoorName', back_populates='door')
 
     hooks_list = relationship('HookDoorOpening', back_populates='door')
 
@@ -22,7 +21,7 @@ class Door(Base):
                                            [Room.building_name, Room.room_number]),
                       {})
 
-    # def __init__(self, room):
+
     def __init__(self, room, door_name):
         self.door_name = door_name.name
         self.room_number = room.room_number

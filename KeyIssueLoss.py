@@ -4,7 +4,7 @@ from orm_base import Base
 
 class KeyIssueLoss(Base):
     __tablename__ = "key_issue_losses"
-    issue_number = Column('issue_number', Integer, ForeignKey('key_issues.issue_number'), 
+    issue_number = Column('issue_number', Integer, ForeignKey('key_issue.issue_number'), 
                             nullable=False, primary_key=True)
     loss_date = Column('start_time', DateTime(timezone=True), default=func.now(), nullable=False) # self-generate
 

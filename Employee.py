@@ -23,3 +23,4 @@ class Employee(Base):
         room_request = RoomRequest(self, room)
         room.employees_list.append(room_request)
         self.rooms_list.append(room_request)
+        return room_request
