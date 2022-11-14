@@ -22,11 +22,12 @@ front_door = DoorName("Front")
 ECS101Front = Door(room1, front_door)
 hook1 = Hook()
 hook1key1 = Key(hook1)
+hook1key2 = Key(hook1)
 opening1 = HookDoorOpening(hook1, ECS101Front)
 e1 = Employee('James Xiao')
 e2 = Employee('Ke Zhong')
 # somehow this would add another room request to the table even without sess.add(rr)
-rr = RoomRequest(e1, room1)
+# rr = RoomRequest(e1, room1)
 
 if __name__ == '__main__':
     logging.basicConfig()
@@ -50,11 +51,18 @@ if __name__ == '__main__':
 
         # sess.add(e1)
         sess.add(e2)
-        e1.request_room(room1)
-        rr.issue_key(hook1key1)
-
+        # employee 1 requests room 1 and given hook1key1
+        rr1 = e1.request_room(room1)
+        ki1 = rr1.issue_key(hook1key1)
+        # employee 2 requests room 1 and given hook1key2
+        rr2 = e2.request_room(room1)
+        ki2 = rr2.issue_key(hook1key1)
+        sess.commit()
+        # employee 1 returns key
+        ki1.return_key()
+        # employee 2 loses key
+        ki2.loss_key()
         # commit the changes
         sess.commit()
-
 
     print("Exiting normally.")
