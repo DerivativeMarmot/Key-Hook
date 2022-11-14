@@ -38,8 +38,9 @@ class RoomRequest(Base):
         if key in self.keys_list:
             return
         
+        # key_issue = KeyIssue(self, key, issue_number)
         key_issue = KeyIssue(self, key)
-        print('key number shism', key.key_number)
+        # print('key number shism', key.key_number)
         key.room_requests_list.append(key_issue)
         self.keys_list.append(key_issue)
-        return key_issue
+        # return key_issue

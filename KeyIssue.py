@@ -6,6 +6,7 @@ from Key import Key
 class KeyIssue(Base):
     __tablename__ = 'key_issue'
     issue_number = Column('issue_number', Integer,  Identity(start=1, cycle=True), nullable=False, primary_key=True) # self-generate
+    # issue_number = Column('issue_number', Integer, nullable=False, primary_key=True)
     request_id = Column('request_id', Integer, ForeignKey('room_requests.request_id'), nullable=False)
     hook_number = Column('hook_number', Integer, nullable=False)
     # hook_number = Column('hook_number', Integer, ForeignKey('keys.hook_number'), nullable=False)
@@ -27,6 +28,7 @@ class KeyIssue(Base):
         self.request_id = room_request.request_id
         self.hook_number = key.hook_number
         self.key_number = key.key_number
+        # self.issue_number = issue_number
         
         self.room_request = room_request
         self.key = key
