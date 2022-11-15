@@ -7,7 +7,7 @@ class KeyIssueLoss(Base):
     __tablename__ = "key_issue_loss"
     issue_number = Column('issue_number', Integer, ForeignKey('key_issue.issue_number'), 
                             nullable=False, primary_key=True)
-    loss_date = Column('loss_date', DateTime(timezone=True), default=func.now(), nullable=False) # self-generate
+    loss_date = Column('loss_date', DateTime(timezone=True), nullable=False) # self-generate
 
     key_issue = relationship('KeyIssue', back_populates='key_issue_loss')
 

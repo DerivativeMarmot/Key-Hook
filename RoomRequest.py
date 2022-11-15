@@ -12,8 +12,6 @@ class RoomRequest(Base):
     employee_id = Column('employee_id', Integer, ForeignKey('employees.id'), nullable=False)
     building_name = Column('building_name', String(200), nullable=False)
     room_number = Column('room_number', Integer, nullable=False)
-    # building_name = Column('building_name', String(200), ForeignKey('rooms.building_name'), nullable=False)
-    # room_number = Column('room_number', Integer, ForeignKey('rooms.room_number'), nullable=False)
 
     employee = relationship('Employee', back_populates='rooms_list')
     room = relationship('Room', back_populates='employees_list')

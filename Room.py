@@ -7,8 +7,8 @@ from orm_base import Base
 
 class Room(Base):
     __tablename__ = "rooms"
-    # building_name = Column(String(200), ForeignKey('buildings.name'), primary_key=True, nullable=False)
-    building_name = Column(String(200), ForeignKey('buildings.name'), nullable=False)
+    building_name = Column(String(200), ForeignKey('buildings.name'), primary_key=True, nullable=False)
+    # building_name = Column(String(200), ForeignKey('buildings.name'), nullable=False)
     room_number = Column('room_number', Integer, primary_key=True, nullable=False)
 
     building = relationship("Building", back_populates="rooms_list")

@@ -26,8 +26,6 @@ hook1key2 = Key(hook1)
 opening1 = HookDoorOpening(hook1, ECS101Front)
 e1 = Employee('James Xiao')
 e2 = Employee('Ke Zhong')
-# somehow this would add another room request to the table even without sess.add(rr)
-# rr = RoomRequest(e1, room1)
 
 if __name__ == '__main__':
     logging.basicConfig()
@@ -56,7 +54,7 @@ if __name__ == '__main__':
         ki1 = rr1.issue_key(hook1key1)
         # employee 2 requests room 1 and given hook1key2
         rr2 = e2.request_room(room1)
-        ki2 = rr2.issue_key(hook1key1)
+        ki2 = rr2.issue_key(hook1key2)
         sess.commit()
         # employee 1 returns key
         ki1.return_key()

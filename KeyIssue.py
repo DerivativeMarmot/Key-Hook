@@ -9,12 +9,9 @@ from KeyIssueLoss import KeyIssueLoss
 class KeyIssue(Base):
     __tablename__ = 'key_issue'
     issue_number = Column('issue_number', Integer,  Identity(start=1, cycle=True), nullable=False, primary_key=True) # self-generate
-    # issue_number = Column('issue_number', Integer, nullable=False, primary_key=True)
     request_id = Column('request_id', Integer, ForeignKey('room_requests.request_id'), nullable=False)
     hook_number = Column('hook_number', Integer, nullable=False)
-    # hook_number = Column('hook_number', Integer, ForeignKey('keys.hook_number'), nullable=False)
     key_number = Column('key_number',Integer, nullable=False)
-    # key_number = Column('key_number', Integer, ForeignKey('keys.key_number'), nullable=False)
     start_time = Column('start_time', DateTime(timezone=True),nullable=False) # self-generate
 
     __table_args__ = (ForeignKeyConstraint((hook_number, key_number),
