@@ -10,11 +10,8 @@ from Room import Room
 from Door import Door
 from DoorName import DoorName
 from Hook import Hook
-from HookDoorOpening import HookDoorOpening
 from Key import Key
 from Employee import Employee
-from RoomRequest import RoomRequest
-from KeyIssue import KeyIssue
 
 ECS_building = Building('ECS')
 room1 = Room(ECS_building, 101)
@@ -23,7 +20,6 @@ ECS101Front = Door(room1, front_door)
 hook1 = Hook()
 hook1key1 = Key(hook1)
 hook1key2 = Key(hook1)
-opening1 = HookDoorOpening(hook1, ECS101Front)
 e1 = Employee('James Xiao')
 e2 = Employee('Ke Zhong')
 
@@ -45,7 +41,7 @@ if __name__ == '__main__':
         sess.add(ECS101Front)
         sess.add(hook1)
         sess.add(hook1key1)
-        sess.add(opening1)
+        hook1.open_door(ECS101Front)
 
         # sess.add(e1)
         sess.add(e2)

@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, Identity
 from sqlalchemy.orm import relationship
-
 from orm_base import Base
 
+from HookDoorOpening import HookDoorOpening
 
 class Hook(Base):
     __tablename__ = 'hooks'
@@ -16,3 +16,11 @@ class Hook(Base):
 
         self.keys_list = []
         self.doors_list = []
+
+    def open_door(self, door):
+        if door in self.doors_list:
+            return
+        
+        onOpen = HookDoorOpening(self, door)
+        self.doors_list.append(onOpen)
+        door.hooks_list.append(onOpen)
