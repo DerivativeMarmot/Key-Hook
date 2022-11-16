@@ -60,3 +60,17 @@ if __name__ == '__main__':
         sess.commit()
 
     print("Exiting normally.")
+   
+    x = -1
+    while x != 0:
+        print("Menu options:\n1.\tCreate a key\n2.\tEmployee Key Request\n3.\tRooms employee can enter\n4.\t"
+              "Delete Key\n5.\tDelete Employee\n6.\tAdd Door to Keyhook\n7.\tUpdate Access Request\n"
+              "8.Employees that can enter a room")
+        x = int(input())
+        if x == 1:
+            print("Key has been created")
+            # sess.add() create a new key
+        elif x == 2:
+            print("Enter the employee name and room number")
+            response = input()
+            for col, val in 
