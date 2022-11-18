@@ -72,6 +72,7 @@ if __name__ == '__main__':
               "Delete Key\n7.\tDelete Employee\n8.\tAdd Door to a hook\n9.\tUpdate Access Request\n"
               "10.\tEmployees that can enter a room\n0.\tExit")
         x = int(input())
+        print()
 
         if x == 1:  # create a new key
             print("Which hook would you like to apply to this key?")
@@ -87,6 +88,7 @@ if __name__ == '__main__':
             sess.add(new_key)  # adds key into table
             print("Key has been created")
             sess.commit()
+            print()
 
         elif x == 2:  # Key Request for an Employee
             print("Which employee wants a key request?")
@@ -108,6 +110,7 @@ if __name__ == '__main__':
             rmReq = emp[response_1].request_room(rm[response_2])
             print("Employee has requested for a room")
             sess.commit()
+            print()
 
         elif x == 3:
             print("Which room request do you want to issue to?")
@@ -133,6 +136,7 @@ if __name__ == '__main__':
                             break
                     break
             print("Key has been issued.")
+            print()
 
         elif x == 4:
             print("Which key has been lost?")
@@ -146,6 +150,7 @@ if __name__ == '__main__':
             response = int(input())
             kyIss[response].loss_key()
             print("Key has been lost...")
+            print()
 
         elif x == 5:
             print("Which employee do you want to view?")
@@ -157,8 +162,20 @@ if __name__ == '__main__':
                 print(option, ":", row)
                 option += 1
             response = int(input())
-            print("These are the rooms this employee can enter:\n")
-            # query searching employee and their key
+            rmReq: [RoomRequest] = sess.query(RoomRequest).filter_by(employee_id=emp[response].id)
+            kyIss: [KeyIssue] = sess.query(KeyIssue).all()
+            hkOp: [HookDoorOpening] = sess.query(HookDoorOpening).all()
+            rooms = []
+            for i in rmReq:
+                for j in kyIss:
+                    if i.request_id == j.request_id:
+                        for h in hkOp:
+                            if h.hook_number == j.hook_number:
+                                rooms.append([h.building_name, h.room_number])
+            print("These are the rooms this employee can enter:")
+            for i in rooms:
+                print(i)
+            print()
 
         elif x == 6:
             print("Which key would you like to delete?")
@@ -173,6 +190,7 @@ if __name__ == '__main__':
             print("Deleting Key...")
             sess.delete(k[response])
             sess.commit()
+            print()
 
         elif x == 7:
             print("Which employee would you like to delete?")
@@ -187,6 +205,7 @@ if __name__ == '__main__':
             print("Deleting Employee...")
             sess.delete(emp[response])
             sess.commit()
+            print()
 
         elif x == 8:
             print("Which hook do you want to access?")
@@ -209,6 +228,7 @@ if __name__ == '__main__':
             print("Adding door to hook")
             hk[response_1].open_door(dr[response_2])
             sess.commit()
+            print()
 
         elif x == 9:
             print("Updating access request")
@@ -236,3 +256,4 @@ if __name__ == '__main__':
             print("These are the rooms this employee can access:")
             for i in names:
                 print(i)
+            print()
