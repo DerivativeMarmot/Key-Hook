@@ -14,6 +14,7 @@ from KeyIssue import KeyIssue
 from Hook import Hook
 from Key import Key
 from Employee import Employee
+from HookDoorOpening import HookDoorOpening
 
 # ECS_building = Building('ECS')
 # room1 = Room(ECS_building, 101)
@@ -72,22 +73,22 @@ if __name__ == '__main__':
               "10.\tEmployees that can enter a room\n0.\tExit")
         x = int(input())
 
-        if x == 1:   # create a new key
+        if x == 1:  # create a new key
             print("Which hook would you like to apply to this key?")
-            hk: [Hook] = sess.query(Hook).all()         # query of the different hooks
-            hk_display: [Hook] = sess.query(Hook.hook_number).all()     # query of the hook numbers
+            hk: [Hook] = sess.query(Hook).all()  # query of the different hooks
+            hk_display: [Hook] = sess.query(Hook.hook_number).all()  # query of the hook numbers
             option = 0
             print("hook number")
-            for row in hk_display:          # for loop that prints out a list of the existing hook numbers
+            for row in hk_display:  # for loop that prints out a list of the existing hook numbers
                 print(option, ":", row)
                 option += 1
             response = int(input())
-            new_key = Key(hk[response])            # creates a new key object to add into the table
-            sess.add(new_key)                      # adds key into table
+            new_key = Key(hk[response])  # creates a new key object to add into the table
+            sess.add(new_key)  # adds key into table
             print("Key has been created")
             sess.commit()
 
-        elif x == 2:    # Key Request for an Employee
+        elif x == 2:  # Key Request for an Employee
             print("Which employee wants a key request?")
             emp: [Employee] = sess.query(Employee).all()
             emp_display: [Employee] = sess.query(Employee.id, Employee.full_name).all()
@@ -135,7 +136,14 @@ if __name__ == '__main__':
 
         elif x == 5:
             print("Which employee do you want to view?")
-            response = input()
+            emp: [Employee] = sess.query(Employee).all()
+            emp_display: [Employee] = sess.query(Employee.id, Employee.full_name).all()
+            option = 0
+            print("(Employee ID, Employee Name)")
+            for row in emp_display:
+                print(option, ":", row)
+                option += 1
+            response = int(input())
             print("These are the rooms this employee can enter:\n")
             # query searching employee and their key
 
@@ -193,14 +201,15 @@ if __name__ == '__main__':
             print("Updating access request")
 
         elif x == 10:
-            print("Which employee would you want to oversee?")
-            emp: [Employee] = sess.query(Employee).all()
-            emp_display: [Employee] = sess.query(Employee.id, Employee.full_name).all()
+            print("Which room would you want to oversee?")
+            hkOp: [HookDoorOpening] = sess.query(HookDoorOpening).all()
+            hkOp_display: [HookDoorOpening] = sess.query(HookDoorOpening.room_number,
+                                                         HookDoorOpening.building_name).all()
             option = 0
-            print("(Employee ID, Employee Name)")
-            for row in emp_display:
+            for row in hkOp_display:
                 print(option, ":", row)
                 option += 1
             response = int(input())
             print("These are the rooms this employee can access:")
-            print(emp[response].rooms_list)
+            kyIss: [KeyIssue] = sess.query(KeyIssue.request_id).filter_by(hook_number=hkOp[response].hook_number)
+            
