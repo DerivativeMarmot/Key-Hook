@@ -59,7 +59,7 @@ if __name__ == '__main__':
     # logging.getLogger("sqlalchemy.pool").setLevel(logging.DEBUG)
 
     # metadata.drop_all(bind=engine)
-    # metadata.create_all(bind=engine)
+    metadata.create_all(bind=engine)
 
     with Session() as sess:
         sess.begin()
@@ -67,35 +67,36 @@ if __name__ == '__main__':
     x = -1
     while x != 0:
         # menu that prints out the different actions the user can do
-        print("Menu options:\n1.\tCreate a key\n2.\tEmployee Room Request\n3.\tIssue a key\n4.\tLosing a key\n5.\tRooms "
+        print("Menu options:\n1.\tCreate a key\n2.\tEmployee Key Request\n3.\tIssue a key\n4.\tLosing a key\n5.\tRooms "
               "employee can enter\n6.\t"
               "Delete Key\n7.\tDelete Employee\n8.\tAdd Door to a hook\n9.\tUpdate Access Request\n"
               "10.\tEmployees that can enter a room\n0.\tExit")
-        x = int(input('> '))
+        x = int(input())
 
         if x == 1:  # create a new key
             print("Which hook would you like to apply to this key?")
             hk: [Hook] = sess.query(Hook).all()  # query of the different hooks
             hk_display: [Hook] = sess.query(Hook.hook_number).all()  # query of the hook numbers
-            
+            option = 0
             print("hook number")
-            for index, row in enumerate(hk_display):  # for loop that prints out a list of the existing hook numbers
-                print(index, ":", row)
-                
-            new_key = Key(hk[int(input())])  # creates a new key object to add into the table / add a new key to an existing hook
+            for row in hk_display:  # for loop that prints out a list of the existing hook numbers
+                print(option, ":", row)
+                option += 1
+            response = int(input())
+            new_key = Key(hk[response])  # creates a new key object to add into the table
             sess.add(new_key)  # adds key into table
             print("Key has been created")
             sess.commit()
 
         elif x == 2:  # Key Request for an Employee
+            print("Which employee wants a key request?")
             emp: [Employee] = sess.query(Employee).all()
             emp_display: [Employee] = sess.query(Employee.id, Employee.full_name).all()
-            
-            print("Which employee wants a room request?")
-            for index, row in enumerate(emp_display):
-                print(index, ":", row)
+            option = 0
+            for row in emp_display:
+                print(option, ":", row)
+                option += 1
             response_1 = int(input())
-            
             print("Which room does the employee want access to?")
             rm: [Room] = sess.query(Room).all()
             rm_display: [Room] = sess.query(Room.room_number, Room.building_name).all()
@@ -111,14 +112,25 @@ if __name__ == '__main__':
         elif x == 3:
             print("Which room request do you want to issue to?")
             rmReq: [RoomRequest] = sess.query(RoomRequest).all()
+            rmReq_display: [RoomRequest] = sess.query(RoomRequest.room, RoomRequest.room_number,
+                                                      RoomRequest.building_name).all()
             option = 0
-            for row in rmReq:
+            for row in rmReq_display:
                 print(option, ":", row)
                 option += 1
-            response = int(input())
-            # this is without checking if room request is valid
-            # needs to be filled with a key, not sure how to access certain keys though
-            kyIss = rmReq[response].issue_key() # waiting for initial data
+            response_1 = int(input())
+            hkOp: [HookDoorOpening] = sess.query(HookDoorOpening).all()
+            k: [Key] = sess.query(Key).all()
+            for hookOp in hkOp:
+                if (hookOp.building_name == rmReq[response_1].building_name and
+                        hookOp.room_number == rmReq[response_1].room_number):
+                    for ki in k:
+                        if hookOp.hook == ki.hook:
+                            kyIss = rmReq[response_1].issue_key(ki)
+                            sess.commit()
+                            break
+                    break
+            print("Key has been issued.")
 
         elif x == 4:
             print("Which key has been lost?")
@@ -211,4 +223,3 @@ if __name__ == '__main__':
             response = int(input())
             print("These are the rooms this employee can access:")
             kyIss: [KeyIssue] = sess.query(KeyIssue.request_id).filter_by(hook_number=hkOp[response].hook_number)
-            
