@@ -24,3 +24,6 @@ class Employee(Base):
         room.employees_list.append(room_request)
         self.rooms_list.append(room_request)
         return room_request
+    
+    def __str__(self) -> str:
+        return 'id: ' + str(self.id) + ' ' + 'name: ' + self.full_name
