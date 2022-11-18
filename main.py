@@ -223,5 +223,16 @@ if __name__ == '__main__':
                 print(option, ":", row)
                 option += 1
             response = int(input())
+            kyIss: [KeyIssue] = sess.query(KeyIssue).filter_by(hook_number=hkOp[response].hook_number)
+            rmReq: [RoomRequest] = sess.query(RoomRequest)
+            emp: [Employee] = sess.query(Employee)
+            names = []
+            for i in kyIss:
+                for j in rmReq:
+                    if i.request_id == j.request_id:
+                        for e in emp:
+                            if e.id == j.employee_id:
+                                names.append(e.full_name)
             print("These are the rooms this employee can access:")
-            kyIss: [KeyIssue] = sess.query(KeyIssue.request_id).filter_by(hook_number=hkOp[response].hook_number)
+            for i in names:
+                print(i)
