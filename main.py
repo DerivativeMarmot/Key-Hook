@@ -121,11 +121,13 @@ if __name__ == '__main__':
             response_1 = int(input())
             hkOp: [HookDoorOpening] = sess.query(HookDoorOpening).all()
             k: [Key] = sess.query(Key).all()
+            kyIs: [KeyIssue] = sess.query(KeyIssue).all()
             for hookOp in hkOp:
                 if (hookOp.building_name == rmReq[response_1].building_name and
                         hookOp.room_number == rmReq[response_1].room_number):
                     for ki in k:
-                        if hookOp.hook == ki.hook:
+                        if (hookOp.hook == ki.hook and kyIs.key_number != ki.key_number and
+                                kyIs.hook_number != ki.hook_number):
                             kyIss = rmReq[response_1].issue_key(ki)
                             sess.commit()
                             break
