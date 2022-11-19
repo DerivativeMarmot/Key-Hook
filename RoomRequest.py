@@ -41,3 +41,7 @@ class RoomRequest(Base):
         key.room_requests_list.append(key_issue)
         self.keys_list.append(key_issue)
         return key_issue
+
+    def update_employee(self, employee):
+        self.employee = employee
+        self.employee_id = employee.id
