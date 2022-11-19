@@ -60,7 +60,7 @@ if __name__ == '__main__':
         x = -1
         while x != 0:
             # menu that prints out the different actions the user can do
-            print("Menu options:\n1.\tCreate a key\n2.\tEmployee Key Request\n3.\tIssue a key\n4.\tLosing a key\n5.\tRooms "
+            print("Menu options:\n1.\tCreate a key\n2.\tEmployee Room Request\n3.\tIssue a key\n4.\tLosing a key\n5.\tRooms "
                   "employee can enter\n6.\t"
                   "Delete Key\n7.\tDelete Employee\n8.\tAdd Door to a hook\n9.\tUpdate Access Request\n"
                   "10.\tEmployees that can enter a room\n0.\tExit")
@@ -83,8 +83,8 @@ if __name__ == '__main__':
                 sess.commit()
                 print()
 
-            elif x == 2:  # Key Request for an Employee
-                print("Which employee wants a key request?")
+            elif x == 2:  # Room Request for an Employee
+                print("Which employee wants a room request?")
                 emp: [Employee] = sess.query(Employee).all()
                 emp_display: [Employee] = sess.query(Employee.id, Employee.full_name).all()
                 option = 0
@@ -106,28 +106,48 @@ if __name__ == '__main__':
                 print()
 
             elif x == 3:
-                print("Which room request do you want to issue to?")
                 rmReq: [RoomRequest] = sess.query(RoomRequest).all()
-                rmReq_display: [RoomRequest] = sess.query(RoomRequest.room, RoomRequest.room_number,
-                                                          RoomRequest.building_name).all()
-                option = 0
-                for row in rmReq_display:
-                    print(option, ":", row)
-                    option += 1
-                response_1 = int(input())
-                hkOp: [HookDoorOpening] = sess.query(HookDoorOpening).all()
-                k: [Key] = sess.query(Key).all()
-                kyIs: [KeyIssue] = sess.query(KeyIssue).all()
-                for hookOp in hkOp:
-                    if (hookOp.building_name == rmReq[response_1].building_name and
-                            hookOp.room_number == rmReq[response_1].room_number):
-                        for ki in k:
-                            if (hookOp.hook == ki.hook and kyIs.key_number != ki.key_number and
-                                    kyIs.hook_number != ki.hook_number):
-                                kyIss = rmReq[response_1].issue_key(ki)
-                                sess.commit()
-                                break
-                        break
+                rmReq_display: [RoomRequest] = sess.query(RoomRequest.request_id,
+                                                          RoomRequest.building_name, RoomRequest.room_number).all()
+                # select a room request
+                print("Which room request do you want to issue to?")
+                for index, row in enumerate(rmReq_display):
+                    print(index, ":", row)
+                selected_req : RoomRequest = rmReq[int(input())]
+
+                # find the hooks that can access a given room
+                hooks = sess.query(Hook).join(
+                    HookDoorOpening, Hook.hook_number == HookDoorOpening.hook_number).filter(
+                        HookDoorOpening.building_name == selected_req.building_name,
+                        HookDoorOpening.room_number == selected_req.room_number
+                    ).all()
+                hooks_display = sess.query(Hook.hook_number).join(
+                    HookDoorOpening, Hook.hook_number == HookDoorOpening.hook_number).filter(
+                        HookDoorOpening.building_name == selected_req.building_name,
+                        HookDoorOpening.room_number == selected_req.room_number
+                    ).all()
+                print('Hooks that is able to access this room is listed\nSelect a hook')
+                for index, row in enumerate(hooks_display):
+                    print(index, ":", row)
+                selected_hook : Hook = hooks[int(input())]
+                
+                # select a key
+                keys = sess.query(Key).filter(
+                    Key.hook_number == selected_hook.hook_number
+                )
+                keys_display = sess.query(Key.hook_number, Key.key_number).filter(
+                    Key.hook_number == selected_hook.hook_number
+                )
+                print('Keys that is able to access this room is listed\nSelect a key')
+                for index, row in enumerate(keys_display):
+                    print(index, ":", row)
+                selected_key = keys[int(input())]
+
+                # issue the key
+                selected_req.issue_key(selected_key)
+
+                sess.commit()
+                
                 print("Key has been issued.")
                 print()
 
