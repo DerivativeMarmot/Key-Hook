@@ -43,11 +43,11 @@ VALUES (1024),
 
 INSERT INTO keys (hook_number)
 VALUES (1024),
-       (1025),
+       (1025), (1025),
        (1026),
        (1027),
        (1028),
-       (1029);
+       (1029), (1029), (1029);
 
 INSERT INTO employees (full_name)
 VALUES ('Jimmy Johnson'),
@@ -69,4 +69,5 @@ VALUES (1024, 'COB', 30, 'Aang'),
 INSERT INTO room_requests (request_time, employee_id, building_name, room_number)
 VALUES ('2022-11-19', 1, 'COB', 140),
        ('2022-10-19', 6, 'PH1', 402),
-       ('2022-09-19', 4, 'DESN', 105);
+       ('2022-09-19', 4, 'DESN', 105),
+       ('2022-08-19', 2, 'PSY', 309);
