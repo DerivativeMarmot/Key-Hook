@@ -162,6 +162,8 @@ if __name__ == '__main__':
                     option += 1
                 response = int(input())
                 kyIss[response].loss_key()
+
+                sess.commit()
                 print("Key has been lost...")
                 print()
 

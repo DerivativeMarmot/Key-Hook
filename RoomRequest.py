@@ -16,7 +16,7 @@ class RoomRequest(Base):
     employee = relationship('Employee', back_populates='rooms_list')
     room = relationship('Room', back_populates='employees_list')
 
-    keys_list = relationship('KeyIssue', back_populates='room_request', viewonly=False)
+    keys_list = relationship('KeyIssue', back_populates='room_request', viewonly=False, cascade="all,delete")
 
     __table_args__ = (ForeignKeyConstraint((building_name, room_number),
                                            [Room.building_name, Room.room_number]),

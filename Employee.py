@@ -9,7 +9,7 @@ class Employee(Base):
                        nullable=False, primary_key=True) # self-generate
     full_name = Column('full_name', String(200), nullable=False)
 
-    rooms_list = relationship('RoomRequest', back_populates='employee', viewonly=False)
+    rooms_list = relationship('RoomRequest', back_populates='employee', viewonly=False, cascade="all,delete")
 
 
     def __init__(self, full_name: String) -> None:

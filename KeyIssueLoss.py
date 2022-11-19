@@ -9,7 +9,7 @@ class KeyIssueLoss(Base):
                             nullable=False, primary_key=True)
     loss_date = Column('loss_date', DateTime(timezone=True), nullable=False) # self-generate
 
-    key_issue = relationship('KeyIssue', back_populates='key_issue_loss')
+    key_issue = relationship('KeyIssue', back_populates='key_issue_loss', cascade="all,delete")
 
     def __init__(self, key_issue, loss_date=func.now()):
         self.issue_number = key_issue.issue_number

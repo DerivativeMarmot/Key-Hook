@@ -20,8 +20,8 @@ class KeyIssue(Base):
     room_request = relationship('RoomRequest', back_populates='keys_list')
     key = relationship('Key', back_populates='room_requests_list')
 
-    key_issue_loss = relationship('KeyIssueLoss', back_populates='key_issue')
-    key_issue_return = relationship('KeyIssueReturn', back_populates='key_issue')
+    key_issue_loss = relationship('KeyIssueLoss', back_populates='key_issue', cascade="all,delete")
+    key_issue_return = relationship('KeyIssueReturn', back_populates='key_issue', cascade="all,delete")
 
     def __init__(self, room_request, key) -> None:
         self.request_id = room_request.request_id
@@ -41,8 +41,8 @@ class KeyIssue(Base):
 
     def loss_key(self):
         # make sure the key isn't already loss / returned
-        if len(self.key_issue_loss) + len(self.key_issue_return) > 0:
-            return
+        # if len(self.key_issue_loss) + len(self.key_issue_return) > 0:
+        #     return
         key_loss = KeyIssueLoss(self)
         self.key_issue_loss.append(key_loss)
         return key_loss
