@@ -1,6 +1,6 @@
 # Key-Hook
 
-### Universal Modeling Language:
+### Unified Modeling Language:
 ![UML](./Models/Key_Hook_UML.png)
 
 ### Entity Relationship Diagram:
